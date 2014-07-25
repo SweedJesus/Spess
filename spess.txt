@@ -1,0 +1,12 @@
+"Spess"
+{
+	"base"				"base"
+	"title"				"Spess"
+	"maps"				"^sps_"
+	"menusystem"	"1"
+
+	"settings"
+	{
+	
+	}
+}

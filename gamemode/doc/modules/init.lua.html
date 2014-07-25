@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Spess documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/cl_init.lua.html">cl_init.lua</a></li>
+  <li><strong>init.lua</strong></li>
+  <li><a href="../modules/shared.lua.html">shared.lua</a></li>
+  <li><a href="../modules/util.lua.html">util.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>init.lua</code></h1>
+<p>Server initialization module.</p>
+<p> Run on a server machine to host the Spess gamemode for Garry's Mod.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#GM:Initialize">GM:Initialize ()</a></td>
+	<td class="summary">Server gamemode initialization.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GM:ShowVersion">GM:ShowVersion (ply)</a></td>
+	<td class="summary">Display gamemode version.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SendRoundState">SendRoundState (state, ply)</a></td>
+	<td class="summary">Send a round state value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetRoundState">SetRoundState (state)</a></td>
+	<td class="summary">Set server round state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#WaitForPlayers">WaitForPlayers ()</a></td>
+	<td class="summary">Start waiting for players.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetupRoundPregame">SetupRoundPregame ()</a></td>
+	<td class="summary">Setup round state pregame.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetupRoundActive">SetupRoundActive ()</a></td>
+	<td class="summary">Setup round state active.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetupRoundPostgame">SetupRoundPostgame ()</a></td>
+	<td class="summary">Setup round state postgame.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GM:Initialize"></a>
+    <strong>GM:Initialize ()</strong>
+    </dt>
+    <dd>
+    Server gamemode initialization.
+ Initializes the server for our Spess gamemode.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GM:ShowVersion"></a>
+    <strong>GM:ShowVersion (ply)</strong>
+    </dt>
+    <dd>
+    Display gamemode version.
+ Simply displays the version of our Spess gamemode to a specified player as a chat message or to all players as a console message.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ply</span>
+         Player to display gamemode version to
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SendRoundState"></a>
+    <strong>SendRoundState (state, ply)</strong>
+    </dt>
+    <dd>
+    Send a round state value.
+ Send a specified round state to a single player or broadcast.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         Round state value to send
+        </li>
+        <li><span class="parameter">ply</span>
+         Player to send to, or none to broadcast
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Player table <code>ply</code>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SetRoundState"></a>
+    <strong>SetRoundState (state)</strong>
+    </dt>
+    <dd>
+    Set server round state.
+ Set the server round state and broadcast.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         New round state value
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "WaitForPlayers"></a>
+    <strong>WaitForPlayers ()</strong>
+    </dt>
+    <dd>
+    Start waiting for players.
+ Set round state to <code>ROUND_WAIT</code> and start a looping timer, checking for player count to reach a base amount.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SetupRoundPregame"></a>
+    <strong>SetupRoundPregame ()</strong>
+    </dt>
+    <dd>
+    Setup round state pregame.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SetupRoundActive"></a>
+    <strong>SetupRoundActive ()</strong>
+    </dt>
+    <dd>
+    Setup round state active.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SetupRoundPostgame"></a>
+    <strong>SetupRoundPostgame ()</strong>
+    </dt>
+    <dd>
+    Setup round state postgame.
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
