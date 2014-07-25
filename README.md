@@ -5,5 +5,5 @@ Spess is an experiment in gamemode creation for Garry's Mod, a Half Life 2/Sourc
 Clone or download and unzip this repository into your `...\SteamLibrary\steamapps\common\GarrysMod\garrysmod\gamemodes\` directory, then just launch Garry's Mod and select Spess from the list of gamemodes in the bottom right corner.
 
 ## Notes on programming
-[Notes on Garry's Mod gamemode creation](/notes/gamemodes.md)
-[Notes on Lua](/notes/lua.md)
+* [Notes on Garry's Mod gamemode creation](/notes/gamemodes.md)
+* [Notes on Lua](/notes/lua.md)
