@@ -64,20 +64,32 @@
 <h2><a href="#Constants">Constants </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Round">Round</a></td>
-	<td class="summary">Round status constants (2 bits)</td>
+	<td class="name" nowrap><a href="#C">C</a></td>
+	<td class="summary">Constants table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Net">Net</a></td>
-	<td class="summary">Networking identifier constants (char)</td>
+	<td class="name" nowrap><a href="#C.ROUND">C.ROUND</a></td>
+	<td class="summary">Round statuses (2 bits).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Timer">Timer</a></td>
-	<td class="summary">Timer identifier constants (char)</td>
+	<td class="name" nowrap><a href="#C.NET">C.NET</a></td>
+	<td class="summary">Networking identifiers (char).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ConCmd">ConCmd</a></td>
-	<td class="summary">Console command tokens (string)</td>
+	<td class="name" nowrap><a href="#C.TIMER">C.TIMER</a></td>
+	<td class="summary">Timer identifiers (char).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#C.CVART">C.CVART</a></td>
+	<td class="summary">Cosnole variable types (int).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#C.CVAR">C.CVAR</a></td>
+	<td class="summary">Console variables [cvars] (string).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#C.CONCMD">C.CONCMD</a></td>
+	<td class="summary">Console command tokens (string).</td>
 	</tr>
 </table>
 
@@ -99,16 +111,19 @@
 
     <h3>Fields:</h3>
     <ul>
-        <li><span class="parameter">Name</span>
+        <li><span class="parameter">NAME</span>
+         Gamemode name
+        </li>
+        <li><span class="parameter">AUTHOR</span>
          Gamemode author
         </li>
-        <li><span class="parameter">Email</span>
+        <li><span class="parameter">EMAIL</span>
          Gamemode author email
         </li>
-        <li><span class="parameter">Website</span>
+        <li><span class="parameter">WEBSITE</span>
          Gamemode author website
         </li>
-        <li><span class="parameter">Version</span>
+        <li><span class="parameter">VERSION</span>
          Gamemode current version
         </li>
     </ul>
@@ -124,11 +139,25 @@
 
     <dl class="function">
     <dt>
-    <a name = "Round"></a>
-    <strong>Round</strong>
+    <a name = "C"></a>
+    <strong>C</strong>
     </dt>
     <dd>
-    Round status constants (2 bits)
+    Constants table
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "C.ROUND"></a>
+    <strong>C.ROUND</strong>
+    </dt>
+    <dd>
+    Round statuses (2 bits).
 
 
     <h3>Fields:</h3>
@@ -153,11 +182,11 @@
 
 </dd>
     <dt>
-    <a name = "Net"></a>
-    <strong>Net</strong>
+    <a name = "C.NET"></a>
+    <strong>C.NET</strong>
     </dt>
     <dd>
-    Networking identifier constants (char)
+    Networking identifiers (char).
 
 
     <h3>Fields:</h3>
@@ -176,11 +205,11 @@
 
 </dd>
     <dt>
-    <a name = "Timer"></a>
-    <strong>Timer</strong>
+    <a name = "C.TIMER"></a>
+    <strong>C.TIMER</strong>
     </dt>
     <dd>
-    Timer identifier constants (char)
+    Timer identifiers (char).
 
 
     <h3>Fields:</h3>
@@ -199,20 +228,74 @@
 
 </dd>
     <dt>
-    <a name = "ConCmd"></a>
-    <strong>ConCmd</strong>
+    <a name = "C.CVART"></a>
+    <strong>C.CVART</strong>
     </dt>
     <dd>
-    Console command tokens (string)
+    Cosnole variable types (int).
 
 
     <h3>Fields:</h3>
     <ul>
-        <li><span class="parameter">HELLO_WORLD</span>
-         "sps<em>hello</em>world"
+        <li><span class="parameter">BOOLEAN</span>
+
+
+
         </li>
-        <li><span class="parameter">GET_ROUND_STATE</span>
-         "sps<em>get</em>round_state"
+        <li><span class="parameter">FLOAT</span>
+
+
+
+        </li>
+        <li><span class="parameter">INT</span>
+
+
+
+        </li>
+        <li><span class="parameter">STRING</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "C.CVAR"></a>
+    <strong>C.CVAR</strong>
+    </dt>
+    <dd>
+    Console variables [cvars] (string).
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">MIN_PLAYERS</span>
+         Minimum players to start pre-round ("sps_min_players").
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "C.CONCMD"></a>
+    <strong>C.CONCMD</strong>
+    </dt>
+    <dd>
+    Console command tokens (string).
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">MAP</span>
+         Print current map ("!map").
         </li>
     </ul>
 

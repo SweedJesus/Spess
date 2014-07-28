@@ -1,106 +1,71 @@
 --- Server initialization module.
--- Run on a server machine to host the Spess gamemode for Garry's Mod.
+-- Server machine initialization for Spess.
 -- @module init.lua
+SPS = {}
 
+--- Logging identifiers.
+-- @table SPS.NET
+-- @field NONE No message logging (0)
+-- @field BRIEF Brief message logging (1)
+-- @field VERBOSE Verbose message logging (2)
+SPS.LOG = {
+	NONE = 0,
+	BRIEF = 1,
+	VERBOSE = 2
+}
+
+--- Console variable (cvars) strings.
+-- @table SPS.CVAR
+-- @field MIN_PLAYERS Minimum players to start pre-round ("sps\_min\_players").
+SPS.CVAR = {
+	LOG_LEVEL = "sps_log_level",
+	MIN_PLAYERS = "sps_minimum_players",
+	PRE_SECONDS = "sps_preround_seconds"
+}
+
+--- Server cvars.
+-- Server console variables stored in value/type pairs.
+-- @table ServerCvars
+-- @field MIN_PLAYERS Minimum ("sps_minimum_players").
+Cvars = {
+	[SPS.CVAR.LOG_LEVEL] = {"2", nil, nil},
+	[SPS.CVAR.MIN_PLAYERS] = {"2", nil, nil},
+	[SPS.CVAR.PRE_SECONDS] = {"30", nil, nil}
+}
+
+-- Files to send to clients
 AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("cl_hud.lua")
+AddCSLuaFile("cl_util.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
-include("util.lua")
+include("log.lua")
+include("round.lua")
 
 -- Add network strings
--- See shared for keys/values
-util.AddNetworkString(Net.ROUNDSTATE)
-util.AddNetworkString(Net.ROLE)
+util.AddNetworkString(SPS.NET.ROUNDSTATE)
+util.AddNetworkString(SPS.NET.ROLE)
 
 --- Server gamemode initialization.
--- Initializes the server for our Spess gamemode.
+-- Initialize the server for Spess.
 function GM:Initialize()
-	MsgN("Spess gamemode server initializing...")
-	GAMEMODE.ShowVersion()
+	MsgN("Spess server initializing...")
+	MsgN(string.format("Version %s", GAMEMODE.VERSION))
 
-	-- Map and server config defaults
-	GAMEMODE.roundState = ROUND_PRE
-
-	-- Initialize PRNG
 	math.randomseed(os.time())
 
-	-- Start waiting for players
-	WaitForPlayers()
-end
+	GAMEMODE.roundState = SPS.ROUND.WAIT
 
---- Display gamemode version.
--- Simply displays the version of our Spess gamemode to a specified player as a chat message or to all players as a console message.
--- @param ply Player to display gamemode version to
-function GM:ShowVersion(ply)
-	local text = Format("This is Spess version %s\n", GAMEMODE.Version)
-	if IsValid(ply) then
-		ply:PrintMessage(HUD_PRINTTALK, text)
-	else
-	    Msg(text)
+	-- Create cvars
+	for k, v in pairs(Cvars) do
+		CreateConVar(k, unpack(v))
 	end
+
+	StartWaitingForPlayers()
 end
 
---- Convar replication.
--- Because convar replication (server to client) is apparently broken in GMod.
+--- Cvar replication.
+-- Because cvar replication (server to client) is apparently broken in GMod.
 function GM:SyncGlobals()
 end
-
---- Send a round state value.
--- Send a specified round state to a single player or broadcast.
--- @param state Round state value to send
--- @param ply Player to send to, or none to broadcast
--- @return Player table `ply`
-function SendRoundState(state, ply)
-	net.Start(NET_SPS_ROUNDSTATE)
-	net.WriteUInt(state, 2)
-	return ply and net.Send(ply) or net.Broadcast()
-end
-
---- Set server round state.
--- Set the server round state and broadcast.
--- @param state New round state value
-function SetRoundState(state)
-	GAMEMODE.round_state = state
-	SendRoundState(state)
-	MsgN(string.format("Game round state set to %s", state))
-end
-
--- Check for enough players.
-local function EnoughPlayers()
-	return false
-end
-
--- Waiting for players timer helper.
-local function WaitForPlayersHelper()
-	if GetRoundState() == C.WAIT and EnoughPlayers() then
-		-- Transition from round state wait to pregame
-		timer.Create(Timer.WAIT2PRE, 1, 1, SetupRoundPregame)
-
-		-- Stop waiting for players timer
-		timer.Stop(Timer.WAIT)
-	end
-end
-
---- Start waiting for players.
--- Set round state to `ROUND_WAIT` and start a looping timer, checking for player count to reach a base amount.
-function WaitForPlayers()
-	SetRoundState(ROUND_WAIT)
-
-	if not timer.Start(Timer.WAIT) then
-		timer.Create(Timer.WAIT, 2, 0, WaitForPlayersHelper)
-	end
-end
-
---- Setup round state pregame.
-function SetupRoundPregame()
-end
-
---- Setup round state active.
-function SetupRoundActive()
-end
-
---- Setup round state postgame.
-function SetupRoundPostgame()
-end
-	

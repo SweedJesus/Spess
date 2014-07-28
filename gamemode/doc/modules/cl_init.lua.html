@@ -58,18 +58,11 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#GM:Initialize">GM:Initialize ()</a></td>
-	<td class="summary">Initialize client gamemode
- Run on a client machine as it connects to a Garry's Mod server running the Spess gamemode.</td>
+	<td class="summary">Initialize client gamemode.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#InitConCommands">InitConCommands ()</a></td>
-	<td class="summary">Initialize client console commands
- Give some console functions to clients.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#GetRoundState">GetRoundState ()</a></td>
-	<td class="summary">Get round state
- Get the global round state value (server has to have synced globals).</td>
+	<td class="summary">Initialize client console commands.</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
@@ -92,8 +85,8 @@
     <strong>GM:Initialize ()</strong>
     </dt>
     <dd>
-    Initialize client gamemode
- Run on a client machine as it connects to a Garry's Mod server running the Spess gamemode.
+    Initialize client gamemode.
+ Initialize the client for spess.
 
 
 
@@ -107,32 +100,11 @@
     <strong>InitConCommands ()</strong>
     </dt>
     <dd>
-    Initialize client console commands
+    Initialize client console commands.
  Give some console functions to clients.
 
 
 
-
-
-
-
-</dd>
-    <dt>
-    <a name = "GetRoundState"></a>
-    <strong>GetRoundState ()</strong>
-    </dt>
-    <dd>
-    Get round state
- Get the global round state value (server has to have synced globals).
-
-
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><span class="type">int</span></span>
-        round state
-    </ol>
 
 
 
@@ -152,11 +124,8 @@
 
     <h3>Fields:</h3>
     <ul>
-        <li><span class="parameter">sps_hello_world</span>
-         Utility hello world test function.
-        </li>
-        <li><span class="parameter">sps_get_round_state</span>
-         Display the current server round state.
+        <li><span class="parameter">MAP</span>
+         Print current map ("!map").
         </li>
     </ul>
 

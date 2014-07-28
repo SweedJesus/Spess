@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
@@ -60,8 +61,8 @@
 	<td class="summary">Server gamemode initialization.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#GM:ShowVersion">GM:ShowVersion (ply)</a></td>
-	<td class="summary">Display gamemode version.</td>
+	<td class="name" nowrap><a href="#GM:SyncGlobals">GM:SyncGlobals ()</a></td>
+	<td class="summary">Cvar replication.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#SendRoundState">SendRoundState (state, ply)</a></td>
@@ -88,6 +89,17 @@
 	<td class="summary">Setup round state postgame.</td>
 	</tr>
 </table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ServerCvars">ServerCvars</a></td>
+	<td class="summary">Server cvars.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SharedCvars">SharedCvars</a></td>
+	<td class="summary">Shared cvars.</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
@@ -102,7 +114,7 @@
     </dt>
     <dd>
     Server gamemode initialization.
- Initializes the server for our Spess gamemode.
+ Initialize the server for Spess.
 
 
 
@@ -112,20 +124,14 @@
 
 </dd>
     <dt>
-    <a name = "GM:ShowVersion"></a>
-    <strong>GM:ShowVersion (ply)</strong>
+    <a name = "GM:SyncGlobals"></a>
+    <strong>GM:SyncGlobals ()</strong>
     </dt>
     <dd>
-    Display gamemode version.
- Simply displays the version of our Spess gamemode to a specified player as a chat message or to all players as a console message.
+    Cvar replication.
+ Because cvar replication (server to client) is apparently broken in GMod.
 
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">ply</span>
-         Player to display gamemode version to
-        </li>
-    </ul>
 
 
 
@@ -231,6 +237,46 @@
     </dt>
     <dd>
     Setup round state postgame.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ServerCvars"></a>
+    <strong>ServerCvars</strong>
+    </dt>
+    <dd>
+    Server cvars.
+ Server console variables stored in value/type pairs.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">MIN_PLAYERS</span>
+         {2, C.CVART.INT} ("sps<em>minimum</em>players").
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SharedCvars"></a>
+    <strong>SharedCvars</strong>
+    </dt>
+    <dd>
+    Shared cvars.
+ Server and client console variables stored in value/type pairs.
 
 
 

@@ -1,56 +1,44 @@
 --- Client initialization module.
--- Run on a client machine as it connects to a Garry's Mod server running the Spess gamemode.
+-- Client machine initialization for Spess.
 -- @module cl_init.lua
+SPS = {}
 
-include("shared.lua")
-include("util.lua")
-
---- Console command functions.
--- @table conCommands
--- @field sps_hello_world Utility hello world test function.
--- @field sps_get_round_state Display the current server round state.
-local conCommands = {
-	[ConCmd.HELLO_WORLD] = util.HelloWorld,
-
-	[ConCmd.GET_ROUND_STATE] = function(ply)
-		local roundState = GetRoundState()
-		local text = "Round state: %s\n"
-		if (roundState == ROUND_WAIT) then
-			text = string.format(text, "waiting")
-		elseif (roundState == ROUND_PRE) then
-			text = string.format(text, "pre-round")
-		elseif (roundState == ROUND_ACTIVE) then
-			text = string.format(text, "active")
-		else -- roundState == ROUND_POST
-			text = string.format(text, "post-round")
-		end
-		if (IsValid(ply)) then 
-			ply:PrintMessage(HUD_PRINTTALK, text)
-		else
-		    Msg(text)
-		end
-	end,
-
-
+--- Font identifiers.
+-- @table SPS.FONT
+-- @field ROUND Round status ('0')
+SPS.FONT = {
+	ROUND_STATE = '0'
 }
 
---- Initialize client gamemode
--- Run on a client machine as it connects to a Garry's Mod server running the Spess gamemode.
+--- Colors.
+-- @table SPS.COLOR
+-- @field HUD_PANEL_BACKGROUND Background color for HUD panels.
+SPS.COLOR = {
+	HUD_PANEL_BACKGROUND = Color(50, 60, 70, 191),
+	HUD_TEXT = Color(255, 255, 255, 255)
+}
+ 
+include("cl_hud.lua")
+include("cl_util.lua")
+include("shared.lua")
+
+--- Initialize client gamemode.
+-- Initialize the client for spess.
 function GM:Initialize()
 	MsgN("Spess client initializing...")
+	MsgN(string.format("Version %s", GAMEMODE.VERSION))
 
-	InitConCommands()
+	GAMEMODE.roundState = SPS.ROUND.WAIT
 end
 
---- Initialize client console commands
--- Give some console functions to clients.
-function InitConCommands()
-	for k, v in pairs(conCommands) do
-		concommand.Add(k, v)
+local function ReceiveRoundState()
+	local o = GAMEMODE.roundState
+	GAMEMODE.roundState = net.ReadUInt(3)
+
+	if o != GAMEMODE.roundState then
+		-- RoundStateChange(o, GAMEMODE.roundState)
 	end
-end
 
---- Get round state
--- Get the global round state value (server has to have synced globals).
--- @treturn int round state
-function GetRoundState() return GAMEMODE.roundState end
+	MsgN("Round state: " .. GAMEMODE.roundState)
+end
+net.Receive(SPS.NET.ROUNDSTATE, ReceiveRoundState)
