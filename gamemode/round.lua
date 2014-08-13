@@ -1,81 +1,104 @@
---- Round control module.
--- Controls and broadcasts the server round state.
+--- Server round module.
+-- Server round state control and broadcasting module.
 -- @module round.lua
 
---- Send a round state value.
--- Send a specified round state to a single player or broadcast.
--- @param state Round state value to send
--- @param ply Player to send to, or none to broadcast
--- @return player
-function SendRoundState(state, ply)
-	net.Start(SPS.NET.ROUNDSTATE)
-	net.WriteUInt(state, 3)
-	return ply and net.Send(ply) or net.Broadcast()
-end
-
---- Set server round state.
--- Set the server round state and broadcast.
--- @param state New round state value
-function SetRoundState(state)
-	LogMsgN(string.format("Game round state set to %s", state), SPS.LOG.VERBOSE)
-	GAMEMODE.roundState = state
-	SendRoundState(state)
-end
-
--- Check for enough players.
-local function EnoughPlayers()
+local function HaveEnoughPlayers()
 	local ready = 0
 	for _, ply in pairs(player.GetAll()) do
-		if IsValid(ply) then
+		if (IsValid(ply)) then
 			ready = ready + 1
 		end
 	end
-	return ready >= GetConVar(SPS.CVAR.MIN_PLAYERS):GetInt()
+	return ready >= GetConVar(T.CVAR.WAIT_MIN_PLAYERS):GetInt()
 end
 
--- Waiting for players timer helper.
-local function WaitForPlayersHelper()
-	LogMsg("Checking player count... ", SPS.LOG.VERBOSE)
-	if GAMEMODE.roundState == SPS.ROUND.WAIT and EnoughPlayers() then
-		timer.Stop(SPS.TIMER.WAIT)
-
-		-- Transition from round state wait to pregame
-		timer.Create(SPS.TIMER.WAIT2PRE, 3, 1, StartPregame)
-
-		LogMsgN("enough, moving to pregame.", SPS.LOG.VERBOSE)
+local function WaitHelper()
+	T.LogMsg("Checking player count... ", T.LOG.VERBOSE)
+	if (HaveEnoughPlayers()) then
+		T.LogMsgN("enough, moving to preround.", T.LOG.VERBOSE)
+		timer.Create(T.TIMER.ROUND, 3, 1, T.SetRoundStatePre)
 	else
-		LogMsgN("not enough.", SPS.LOG.VERBOSE)
+		T.LogMsgN("not enough.", T.LOG.VERBOSE)
 	end
 end
 
---- Start waiting for players.
--- Set round state to `ROUND_WAIT` and start a looping timer, checking for player count to reach a base amount.
-function StartWaitingForPlayers()
-	LogMsgN("Starting round wait state.", SPS.LOG.BRIEF)
-	SetRoundState(SPS.ROUND.WAIT)
+--- Set round state to waiting.
+function T.SetRoundStateWait()
+	T.LogMsgN("Round state changed to waiting.", 2)
+	-- Values
+	T.SetRoundStateValues(T.ROUND.WAIT, CurTime(), 0)
+	-- Timers
+	timer.Destroy(T.TIMER.ROUND)
+	timer.Create(T.TIMER.ROUND, 2, 0, WaitHelper)
+	-- Send
+	T.SendRoundStateValues()
+end
 
-	if not timer.Start(SPS.TIMER.WAIT) then
-		timer.Create(SPS.TIMER.WAIT, 3, 0, WaitForPlayersHelper)
+--- Set round state to pre-round.
+function T.SetRoundStatePre()
+	T.LogMsgN("Round state changed to pre-round.", 2)
+	-- Values
+	local preSeconds = GetConVarNumber(T.CVAR.PRE_SECONDS)
+	local curTime = CurTime()
+	T.SetRoundStateValues(T.ROUND.PRE, curTime, curTime + preSeconds)
+	-- Timers
+	timer.Destroy(T.TIMER.ROUND)
+	timer.Create(T.TIMER.ROUND, preSeconds, 1, T.SetRoundStateActive)
+	-- Send
+	T.SendRoundStateValues()
+	job.SendJobPreferenceRequest()
+end
+
+--- Set round state to active.
+function T.SetRoundStateActive()
+	T.LogMsgN("Round state changed to active.", 2)
+	-- Values
+	T.SetRoundStateValues(T.ROUND.ACTIVE, CurTime(), 0)
+	-- Timers
+	timer.Destroy(T.TIMER.ROUND)
+	-- Send
+	T.SendRoundStateValues()
+end
+
+--- Set round state to post-round.
+function T.SetRoundStatePost()
+	T.LogMsgN("Round state changed to post-round.", 2)
+	-- Values
+	local postSeconds = GetConVarNumber(T.CVAR.PRE_SECONDS)
+	local curTime = CurTime()
+	T.SetRoundStateValues(T.ROUND.POST, curTime, curTime + postSeconds)
+	-- Timers
+	timer.Destroy(T.TIMER.ROUND)
+	timer.Create(T.TIMER.ROUND, post_seconds, 1, StartActive)
+	-- Send
+	T.SendRoundStateValues()
+end
+
+--- Set round state values.
+function T.SetRoundStateValues(_state, _start, _end)
+	T.roundState = _state
+	T.roundStart = _start
+	T.roundEnd = _end
+	T.UpdateGlobalRoundStateValues()
+end
+
+--- Upldate global round state values.
+function T.UpdateGlobalRoundStateValues()
+	SetGlobalInt(T.GLOBAL_VAR.ROUND, T.roundState)
+	SetGlobalFloat(T.GLOBAL_VAR.ROUND_START, T.roundStart)
+	SetGlobalFloat(T.GLOBAL_VAR.ROUND_END, T.roundEnd)
+end
+
+--- Send round state change values.
+function T.SendRoundStateValues(_ply)
+	net.Start(T.NET.ROUND_CHANGE)
+	net.WriteUInt(T.roundState, 2)
+	net.WriteFloat(T.roundStart)
+	net.WriteFloat(T.roundEnd)
+	if (IsValid(_ply)) then
+		net.Send(_ply)
+	else
+    net.Broadcast()
 	end
-end
-
---- Start round pregame.
-function StartPregame()
-	LogMsgN("Starting round pregame state.", SPS.LOG.BRIEF)
-	SetRoundState(SPS.ROUND.PRE)
-
-	timer.Stop(SPS.TIMER.WAIT2PRE)
-end
-
---- Start round active.
-function StartActive()
-	LogMsgN("Starting round active state.", SPS.LOG.BRIEF)
-	SetRoundState(SPS.ROUND.ACTIVE)
-end
-
---- Start round postgame.
-function StartPostgame()
-	LogMsgN("Starting round postgame state.", SPS.LOG.BRIEF)
-	SetRoundState(SPS.ROUND.POST)
 end
 	

@@ -19,30 +19,30 @@ local fonts = {
 	"BudgetLabel",
 	"DermaDefault",
 	"DermaDefaultBold",
-	"DermaLarge"
+	"DermaLarge",
 }
 
 local w = 1180
 local h = 460
 local t_dy = 28
 
-function DrawFontTest()
+function T.DrawFontTest()
 	draw.RoundedBoxEx(
 		8,
 		5,
 		surface.ScreenHeight()/2-h/2,
 		w,
 		h,
-		SPS.COLOR.HUD_PANEL_BACKGROUND,
+		T.COLOR.HUD_PANEL_BACKGROUND,
 		false, true, false, true)
 
 	for i, v in ipairs(fonts) do
 		draw.SimpleText(
-			"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&*()_+",
+			'['..v.."] abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&*()_+",
 			v,
 			20,
 			surface.ScreenHeight()/2-(#fonts*t_dy/2)+(i*t_dy),
-			HUD_TEXT,
+			T.COLOR.HUD_TEXT,
 			TEXT_ALIGN_LEFT,
 			TEXT_ALIGN_TOP)
 	end

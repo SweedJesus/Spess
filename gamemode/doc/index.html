@@ -27,42 +27,169 @@
 <h1>ldoc</h1>
 
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="modules/cl_init.lua.html">cl_init.lua</a></li>
-  <li><a href="modules/init.lua.html">init.lua</a></li>
-  <li><a href="modules/shared.lua.html">shared.lua</a></li>
-  <li><a href="modules/util.lua.html">util.lua</a></li>
+  <li><strong>init.lua</strong></li>
 </ul>
 
 </div>
 
 <div id="content">
 
+<h1>Module <code>init.lua</code></h1>
+<p>Server initialization module.</p>
+<p> Spess server machine initialization module.</p>
 
-  <h2>Generated documentation Spess, a Garry's Mod gamemode.</h2>
 
-<h2>Modules</h2>
-<table class="module_list">
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
 	<tr>
-		<td class="name"  nowrap><a href="modules/cl_init.lua.html">cl_init.lua</a></td>
-		<td class="summary">Client initialization module.</td>
+	<td class="name" nowrap><a href="#GM:Initialize">GM:Initialize ()</a></td>
+	<td class="summary">Server gamemode initialization.</td>
 	</tr>
 	<tr>
-		<td class="name"  nowrap><a href="modules/init.lua.html">init.lua</a></td>
-		<td class="summary">Server initialization module.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/shared.lua.html">shared.lua</a></td>
-		<td class="summary">Shared objects module.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/util.lua.html">util.lua</a></td>
-		<td class="summary">Utility module.</td>
+	<td class="name" nowrap><a href="#T.SyncGlobals">T.SyncGlobals ()</a></td>
+	<td class="summary">Cvar replication.</td>
 	</tr>
 </table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#T.TIMER">T.TIMER</a></td>
+	<td class="summary">Timer identifiers.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#T.CVAR">T.CVAR</a></td>
+	<td class="summary">Server cvar identifiers.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#T.CVAR_ARGS">T.CVAR_ARGS</a></td>
+	<td class="summary">Server cvar arguments.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GM:Initialize"></a>
+    <strong>GM:Initialize ()</strong>
+    </dt>
+    <dd>
+    Server gamemode initialization.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "T.SyncGlobals"></a>
+    <strong>T.SyncGlobals ()</strong>
+    </dt>
+    <dd>
+    Cvar replication.
+ Because cvar replication (server to client) is apparently broken in GMod.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "T.TIMER"></a>
+    <strong>T.TIMER</strong>
+    </dt>
+    <dd>
+    Timer identifiers.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">ROUND</span>
+         Round timer
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "T.CVAR"></a>
+    <strong>T.CVAR</strong>
+    </dt>
+    <dd>
+    Server cvar identifiers.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">LOG_LEVEL</span>
+         Server logging level
+        </li>
+        <li><span class="parameter">WAIT_MIN_PLAYERS</span>
+         Minimum player count to wait for
+        </li>
+        <li><span class="parameter">PRE_SECONDS</span>
+         Pre-round length (seconds)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "T.CVAR_ARGS"></a>
+    <strong>T.CVAR_ARGS</strong>
+    </dt>
+    <dd>
+    Server cvar arguments.
+ {value, flags, helptext}
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">LOG_LEVEL</span>
+         {"2", nil, nil}
+        </li>
+        <li><span class="parameter">WAIT_MIN_PLY</span>
+         {"1", nil, nil}
+        </li>
+        <li><span class="parameter">PRE_SECONDS</span>
+         {"5", nil, nil}
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->

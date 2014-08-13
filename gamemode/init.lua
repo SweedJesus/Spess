@@ -1,71 +1,70 @@
 --- Server initialization module.
--- Server machine initialization for Spess.
+-- Spess server machine initialization module.
 -- @module init.lua
-SPS = {}
-
---- Logging identifiers.
--- @table SPS.NET
--- @field NONE No message logging (0)
--- @field BRIEF Brief message logging (1)
--- @field VERBOSE Verbose message logging (2)
-SPS.LOG = {
-	NONE = 0,
-	BRIEF = 1,
-	VERBOSE = 2
-}
-
---- Console variable (cvars) strings.
--- @table SPS.CVAR
--- @field MIN_PLAYERS Minimum players to start pre-round ("sps\_min\_players").
-SPS.CVAR = {
-	LOG_LEVEL = "sps_log_level",
-	MIN_PLAYERS = "sps_minimum_players",
-	PRE_SECONDS = "sps_preround_seconds"
-}
-
---- Server cvars.
--- Server console variables stored in value/type pairs.
--- @table ServerCvars
--- @field MIN_PLAYERS Minimum ("sps_minimum_players").
-Cvars = {
-	[SPS.CVAR.LOG_LEVEL] = {"2", nil, nil},
-	[SPS.CVAR.MIN_PLAYERS] = {"2", nil, nil},
-	[SPS.CVAR.PRE_SECONDS] = {"30", nil, nil}
-}
+T, C, L = {}, {}, {}
 
 -- Files to send to clients
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("cl_hud.lua")
-AddCSLuaFile("cl_util.lua")
-AddCSLuaFile("shared.lua")
+AddCSLuaFile( "shared.lua" )
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile( "cl_job.lua" )
+AddCSLuaFile( "cl_round.lua" )
+AddCSLuaFile( "cl_util.lua" )
+AddCSLuaFile( "skins/cl_spsderma.lua" )
+AddCSLuaFile( "vgui/job_pref_main.lua" )
 
-include("shared.lua")
-include("log.lua")
-include("round.lua")
+include( "shared.lua" )
+include( "job.lua" )
+include( "round.lua" )
+
+--- Server cvar identifiers.
+-- @table T.CVAR
+T.CVAR = {
+	LOG_LEVEL 				= "sps_log_level",
+	WAIT_MIN_PLAYERS 	= "sps_wait_min_players",
+	PRE_SECONDS 			= "sps_preround_seconds",
+	POST_SECONDS 			= "sps_postround_seconds",
+}
+
+--- Server cvar arguments.
+-- @table T.CVAR_ARGS
+T.CVAR_ARGS = {
+	[T.CVAR.LOG_LEVEL] 				= {"2", nil, nil},
+	[T.CVAR.WAIT_MIN_PLAYERS] = {"1", nil, nil},
+	[T.CVAR.PRE_SECONDS] 			= {"10", nil, nil},
+	[T.CVAR.POST_SECONDS] 		= {"2", nil, nil}
+}
+
+--- Timer identifiers.
+-- @table T.TIMER
+T.TIMER = {
+	ROUND = '0'
+}
 
 -- Add network strings
-util.AddNetworkString(SPS.NET.ROUNDSTATE)
-util.AddNetworkString(SPS.NET.ROLE)
+for k, v in pairs(T.NET) do
+	util.AddNetworkString(v)
+end
+
+-- Create cvars
+for k, v in pairs(T.CVAR_ARGS) do
+	CreateConVar(k, unpack(v))
+end
 
 --- Server gamemode initialization.
--- Initialize the server for Spess.
 function GM:Initialize()
 	MsgN("Spess server initializing...")
 	MsgN(string.format("Version %s", GAMEMODE.VERSION))
-
 	math.randomseed(os.time())
 
-	GAMEMODE.roundState = SPS.ROUND.WAIT
-
-	-- Create cvars
-	for k, v in pairs(Cvars) do
-		CreateConVar(k, unpack(v))
-	end
-
-	StartWaitingForPlayers()
+	T.SetRoundStateWait()
 end
 
 --- Cvar replication.
--- Because cvar replication (server to client) is apparently broken in GMod.
-function GM:SyncGlobals()
+function T.SyncGlobals()
 end
+
+concommand.Add( "sps_round_wait", T.SetRoundStateWait )
+concommand.Add( "sps_round_pre", T.SetRoundStatePre )
+concommand.Add( "sps_round_active", T.SetRoundStateActive )
+concommand.Add( "sps_round_post", T.SetRoundStatePost )

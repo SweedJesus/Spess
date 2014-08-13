@@ -1,44 +1,69 @@
 --- Client initialization module.
--- Client machine initialization for Spess.
+-- Spess client machine initialization module.
 -- @module cl_init.lua
-SPS = {}
+T, C, L = {}, {}, {}
+ 
+include( "shared.lua" )
+include( "cl_hud.lua" )
+include( "cl_job.lua" )
+include( "cl_round.lua" )
+include( "cl_util.lua" )
+include( "skins/cl_spsderma.lua" )
+include( "vgui/job_pref_main.lua" )
+
+T.Color = {}
+T.Color.vgui = Color( 50, 50, 53, 255 )
+
+--- Event identifiers.
+-- @table T.EVENT
+T.EVENT = {
+	ROUND_CHANGED = "SPS_E_RoundChanged"
+}
+
+--- Hook identifiers.
+-- @table T.HOOK
+T.HOOK = {
+	ROUND_CHANGED = "SPS_E_RoundChangedHook"
+}
+
+--- Panel identifiers.
+-- @table T.PANEL
+T.PANEL = {
+	JOB_PREF = "SPSJobPref"
+}
+
+--- Server cvar identifiers.
+-- @table T.CVAR
+T.CVAR = {
+	LOG_LEVEL = "sps_log_level"
+}
 
 --- Font identifiers.
--- @table SPS.FONT
--- @field ROUND Round status ('0')
-SPS.FONT = {
-	ROUND_STATE = '0'
+-- @table T.FONT
+T.FONT = {
+	HUD = "Trebuchet24"
+	-- ROUND_STATE = "MyFont"
 }
 
---- Colors.
--- @table SPS.COLOR
--- @field HUD_PANEL_BACKGROUND Background color for HUD panels.
-SPS.COLOR = {
-	HUD_PANEL_BACKGROUND = Color(50, 60, 70, 191),
-	HUD_TEXT = Color(255, 255, 255, 255)
+--- Default client cvars values.
+-- @table T.Cvar
+T.Cvar = {
+	[ T.CVAR.LOG_LEVEL ] = { "2", nil, nil },
 }
- 
-include("cl_hud.lua")
-include("cl_util.lua")
-include("shared.lua")
 
---- Initialize client gamemode.
--- Initialize the client for spess.
+-- Create cvars
+for k, v in pairs( T.Cvar ) do
+	CreateClientConVar( k, unpack( v ) )
+end
+
+-- Get round state values
+T.UpdateRoundStateValsFromGlobals()
+
+-- Concommands
+concommand.Add( "sps_job_preferences", T.JobPref.Toggle )
+
+--- Game load hook.
 function GM:Initialize()
-	MsgN("Spess client initializing...")
-	MsgN(string.format("Version %s", GAMEMODE.VERSION))
-
-	GAMEMODE.roundState = SPS.ROUND.WAIT
+	MsgN( "Spess client initializing..." )
+	MsgN( string.format("Version %s", GAMEMODE.VERSION) )
 end
-
-local function ReceiveRoundState()
-	local o = GAMEMODE.roundState
-	GAMEMODE.roundState = net.ReadUInt(3)
-
-	if o != GAMEMODE.roundState then
-		-- RoundStateChange(o, GAMEMODE.roundState)
-	end
-
-	MsgN("Round state: " .. GAMEMODE.roundState)
-end
-net.Receive(SPS.NET.ROUNDSTATE, ReceiveRoundState)
