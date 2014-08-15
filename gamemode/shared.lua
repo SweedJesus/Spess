@@ -50,34 +50,47 @@ T.ROUND = {
 
 --- Get log level.
 -- @return log level.
-function T.GetLogLevel()
-	return GetConVarNumber(T.CVAR.LOG_LEVEL)
+function GetLogLevel()
+	return GetConVarNumber( T.CVAR.LOG_LEVEL )
 end
 
 --- Get the round state identifier.
 -- @return round state name
 function T.GetRoundState()
-	return GetGlobalInt(T.GLOBAL_VAR.ROUND)
+	return GetGlobalInt( T.GLOBAL_VAR.ROUND )
 end
 
 function T.GetRoundEnd()
-	return GetGlobalInt(T.roundEnd)
+	return GetGlobalInt( T.roundEnd )
 end
 
---- Log message.
--- @param msg message string
--- @param lvl logging level
-function T.LogMsg(msg, lvl)
-	if (lvl <= T.GetLogLevel()) then
-		Msg(msg)
-	end
-end
+function PrintTable( t, indent, tDone )
+	tDone = tDone or {}
+	indent = indent or 0
 
---- Log message (newline).
--- @param msg message string
--- @param lvl logging level
-function T.LogMsgN(msg, lvl)
-	if (lvl <= T.GetLogLevel()) then
-		MsgN(msg)
+	local keys = {}
+	local maxLength = 0
+	for k, _ in pairs( t ) do
+		table.insert( keys, k )
+		if ( #tostring( k ) > maxLength ) then
+			maxLength = #tostring( k )
+		end
 	end
+	table.sort( keys, function( a, b )
+		return tostring(a) < tostring(b)
+	end )
+
+	for i = 1, #keys do
+		local k = keys[ i ]
+		local v = t[ k ]
+		Msg( string.rep( '\t', indent ) )
+		if ( istable( v ) and not tDone[ v ] ) then
+			tDone[ v ] = true
+			MsgN( Format( "[%s]"..string.rep(' ', maxLength - #tostring( k )).." =", k, v ) )
+			PrintTable( v, indent + 1, tDone )
+		else
+			MsgN( Format( "[%s]"..string.rep(' ', maxLength - #tostring( k )).." = %s", k, v ) )
+		end
+	end
+
 end

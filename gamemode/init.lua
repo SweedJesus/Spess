@@ -3,20 +3,6 @@
 -- @module init.lua
 T, C, L = {}, {}, {}
 
--- Files to send to clients
-AddCSLuaFile( "shared.lua" )
-AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "cl_hud.lua" )
-AddCSLuaFile( "cl_job.lua" )
-AddCSLuaFile( "cl_round.lua" )
-AddCSLuaFile( "cl_util.lua" )
-AddCSLuaFile( "skins/cl_spsderma.lua" )
-AddCSLuaFile( "vgui/job_pref_main.lua" )
-
-include( "shared.lua" )
-include( "job.lua" )
-include( "round.lua" )
-
 --- Server cvar identifiers.
 -- @table T.CVAR
 T.CVAR = {
@@ -41,6 +27,22 @@ T.TIMER = {
 	ROUND = '0'
 }
 
+-- Send include files to clients
+AddCSLuaFile( "shared.lua" )
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile( "round/cl_round.lua" )
+AddCSLuaFile( "cl_util.lua" )
+AddCSLuaFile( "log/log.lua" )
+AddCSLuaFile( "job/cl_job.lua")
+AddCSLuaFile( "vgui/job_pref_menu.lua" )
+
+-- Include files
+include( "shared.lua" )
+include( "log/log.lua" )
+include( "job/job.lua")
+include( "round/round.lua" )
+
 -- Add network strings
 for k, v in pairs(T.NET) do
 	util.AddNetworkString(v)
@@ -57,14 +59,28 @@ function GM:Initialize()
 	MsgN(string.format("Version %s", GAMEMODE.VERSION))
 	math.randomseed(os.time())
 
-	T.SetRoundStateWait()
+	round.StartWait()
 end
 
 --- Cvar replication.
 function T.SyncGlobals()
 end
 
-concommand.Add( "sps_round_wait", T.SetRoundStateWait )
-concommand.Add( "sps_round_pre", T.SetRoundStatePre )
-concommand.Add( "sps_round_active", T.SetRoundStateActive )
-concommand.Add( "sps_round_post", T.SetRoundStatePost )
+concommand.Add( "sps_round", function( ply, sCmd, args )
+	local state = args[ 1 ]
+	if ( ( state == '1' ) or ( state == "wait" ) ) then
+		round.StartWait()
+	elseif ( state == '2' ) then
+		round.StartPre()
+	elseif ( state == '3' ) then
+		round.StartActive()
+	elseif ( state == '4' ) then
+		round.StartPost()
+	else
+		log.MsgN( Format( "Unknown round state \"%s\"", state ), 0 )
+	end
+end )
+
+concommand.Add( "sps_jobs", function()
+	PrintTable( job.GetJobsTable() )
+end )

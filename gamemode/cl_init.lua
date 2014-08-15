@@ -2,14 +2,6 @@
 -- Spess client machine initialization module.
 -- @module cl_init.lua
 T, C, L = {}, {}, {}
- 
-include( "shared.lua" )
-include( "cl_hud.lua" )
-include( "cl_job.lua" )
-include( "cl_round.lua" )
-include( "cl_util.lua" )
-include( "skins/cl_spsderma.lua" )
-include( "vgui/job_pref_main.lua" )
 
 T.Color = {}
 T.Color.vgui = Color( 50, 50, 53, 255 )
@@ -51,16 +43,26 @@ T.Cvar = {
 	[ T.CVAR.LOG_LEVEL ] = { "2", nil, nil },
 }
 
+-- Include files
+include( "shared.lua" )
+include( "cl_hud.lua" )
+include( "cl_util.lua" )
+include( "log/log.lua" )
+include( "round/cl_round.lua" )
+include( "job/cl_job.lua" )
+include( "vgui/job_pref_menu.lua" )
+-- include( "skins/cl_spsderma.lua" )
+
 -- Create cvars
 for k, v in pairs( T.Cvar ) do
 	CreateClientConVar( k, unpack( v ) )
 end
 
 -- Get round state values
-T.UpdateRoundStateValsFromGlobals()
+round.UpdateFromGlobals()
 
 -- Concommands
-concommand.Add( "sps_job_preferences", T.JobPref.Toggle )
+concommand.Add( "sps_job_pref_menu", job.ToggleJobPrefMenu )
 
 --- Game load hook.
 function GM:Initialize()

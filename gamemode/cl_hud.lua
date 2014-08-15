@@ -17,14 +17,14 @@ end
 --- Paint HUD foregrounds.
 local function HUDPaintForegrounds()
 	local s
-	if ( T.roundState == 0 ) then
+	if ( round.currentState == 0 ) then
 		s = "Waiting..."
-	elseif ( T.roundState == 1 ) then
-		s = os.date( "Pre-Round %M:%S", math.Round(T.roundEnd - CurTime() ) )
-	elseif ( T.roundState == 2 ) then
-		s = os.date( "Active  %M:%S", ( CurTime() - T.roundStart ) )
-	elseif ( T.roundState == 3 ) then
-		s = os.date( "Post-Round %M:%S", math.Round( T.roundEnd - CurTime() ) )
+	elseif ( round.currentState == 1 ) then
+		s = os.date( "Pre-Round %M:%S", math.Round(round.currentEnd - CurTime() ) )
+	elseif ( round.currentState == 2 ) then
+		s = os.date( "Active  %M:%S", ( CurTime() - round.currentStart ) )
+	elseif ( round.currentState == 3 ) then
+		s = os.date( "Post-Round %M:%S", math.Round( round.currentEnd - CurTime() ) )
 	end
 
 	-- Round state/time text
