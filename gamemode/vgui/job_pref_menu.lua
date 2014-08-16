@@ -1,6 +1,6 @@
 local PANEL = {}
 
-local wide, tall = 350, 500
+local wide, tall = 350, 400
 
 function PANEL:Init()
 	self:SetVisible( false )
@@ -11,17 +11,11 @@ function PANEL:Init()
 	self:MakePopup()
 
 	self.ListView = vgui.Create( "DListView", self )
-	self.ListView:SetSize( wide-10, tall-70 )
+	self.ListView:SetSize( wide-10, tall-65 )
 	self.ListView:SetPos( 5, 30 )
-	self.ListView:SetHeaderHeight( 20 )
 	self.ListView:AddColumn( "Job Name" )
-	--:SetMinWidth( 120 )
 	self.ListView:AddColumn( "Department" )
-	--:SetMinWidth( 80 )
-	local colPref = self.ListView:AddColumn( "Preference" )
-	colPref:SetContentAlignment( 6 )
-	colPref:SetMinWidth( 70 )
-	colPref:SetMaxWidth( 70 )
+	self.ListView:AddColumn( "Preference" )
 	self.ListView.OnClickLine = function()end
 
 	self.ButtonOkay = vgui.Create( "DButton", self )

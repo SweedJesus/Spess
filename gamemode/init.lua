@@ -31,11 +31,18 @@ T.TIMER = {
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_hud.lua" )
-AddCSLuaFile( "round/cl_round.lua" )
 AddCSLuaFile( "cl_util.lua" )
+
 AddCSLuaFile( "log/log.lua" )
+
+AddCSLuaFile( "round/cl_round.lua" )
+
 AddCSLuaFile( "job/cl_job.lua")
+
+AddCSLuaFile( "derma/cl_derma.lua" )
+
 AddCSLuaFile( "vgui/job_pref_menu.lua" )
+AddCSLuaFile( "vgui/job_pref_menu_rad.lua" )
 
 -- Include files
 include( "shared.lua" )

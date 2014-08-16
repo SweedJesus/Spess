@@ -4,38 +4,54 @@
 
 job = {}
 
-local jobTiers = {
-	["Command"] = 1,
-	["Security"] = 2,
-	["Engineering"] = 3,
-	["Science"] = 4,
-	["Medical"] = 5,
-	["Supply"] = 6,
-	["Service"] = 7,
-	["Miscellaneous"] = 8
+local departments = {
+	["Command"] 			= { 1, Color( 156, 195, 227, 100 ) },
+	["Security"] 			= { 2, Color( 231, 151, 151, 100 ) },
+	["Engineering"] 	= { 3, Color( 237, 181, 146, 100 ) },
+	["Science"] 			= { 4, Color( 176, 152, 230, 100 ) },
+	["Medical"] 			= { 5, Color( 230, 152, 216, 100 ) },
+	["Supply"] 				= { 6, Color( 242, 250, 133, 100 ) },
+	["Service"] 			= { 7, Color( 158, 244, 139, 100 ) },
+	["Miscellaneous"] = { 8, Color( 191, 191, 191, 100 ) }
 }
 
 function job.AddJob( jobName, department )
-	local combo = vgui.Create( "DComboBox" )
-	combo.OnSelect = function( panel, index, value )
-		combo.Index = index
-	end
-	combo:AddChoice( "NEVER" )
-	combo:AddChoice( "LOW" )
-	combo:AddChoice( "MEDIUM" )
-	combo:AddChoice( "HIGH" )
-	combo:ChooseOptionID( 1 )
 
-	local line = job.JobPrefMenu.ListView:AddLine( jobName, department, combo )
+	local line
+
+	-- Preference combo box
+	local pref = vgui.Create( "DComboBox" )
+	pref:AddChoice( "NEVER" )
+	pref:AddChoice( "LOW" )
+	pref:AddChoice( "MEDIUM" )
+	pref:AddChoice( "HIGH" )
+	pref:ChooseOptionID( 1 )
+	pref.OnSelect = function( panel, index, value )
+		line.Preference = index
+	end
+
+	-- OR Preference radio check boxes
+	-- local pref = vgui.Create( "JobPrefMenuRadios" )
+
+	line = job.JobPrefMenu.ListView:AddLine( jobName, department, pref )
+	line.JobName = jobName
+	line.Department = department
+	line.Preference = 1 -- Default NEVER
+
+	line.Paint = function( self, w, h )
+		draw.RoundedBox( 0, 0, 0, w, h, departments[ line.Department ][2] )
+	end
+
 	line.GetColumnText = function( self, i )
 		if ( i == 1 ) then
 			return self.Columns[ i ].Value
 		elseif ( i == 2 ) then
-			return jobTiers[ self.Columns[ i ]:GetText() ]
-		else
-			return self.Columns[ i ].Index
+			return departments[ self.Columns[ i ]:GetText() ][1]
+		elseif ( i == 3 ) then
+			return self.Preference
 		end
 	end
+
 end
 
 function job.UpdateJobs()

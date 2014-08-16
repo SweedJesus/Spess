@@ -47,11 +47,17 @@ T.Cvar = {
 include( "shared.lua" )
 include( "cl_hud.lua" )
 include( "cl_util.lua" )
+
 include( "log/log.lua" )
+
 include( "round/cl_round.lua" )
+
 include( "job/cl_job.lua" )
+
+-- include( "derma/cl_derma.lua" )
+
+-- include( "vgui/job_pref_menu_rad.lua" )
 include( "vgui/job_pref_menu.lua" )
--- include( "skins/cl_spsderma.lua" )
 
 -- Create cvars
 for k, v in pairs( T.Cvar ) do
