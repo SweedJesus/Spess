@@ -48,6 +48,8 @@ T.ROUND = {
 	POST 		= 3
 }
 
+math.randomseed(os.time())
+
 --- Get log level.
 -- @return log level.
 function GetLogLevel()
@@ -68,6 +70,7 @@ function PrintTable( t, indent, tDone )
 	tDone = tDone or {}
 	indent = indent or 0
 
+	local count = 0
 	local keys = {}
 	local maxLength = 0
 	for k, _ in pairs( t ) do
@@ -81,16 +84,30 @@ function PrintTable( t, indent, tDone )
 	end )
 
 	for i = 1, #keys do
+		count = count + 1
 		local k = keys[ i ]
 		local v = t[ k ]
-		Msg( string.rep( '\t', indent ) )
+		k = tostring( k )
+		Msg( '\n'..string.rep( '\t', indent )..'['..k.."] "..string.rep('.', maxLength - #k ).." = " )
 		if ( istable( v ) and not tDone[ v ] ) then
 			tDone[ v ] = true
-			MsgN( Format( "[%s]"..string.rep(' ', maxLength - #tostring( k )).." =", k, v ) )
-			PrintTable( v, indent + 1, tDone )
+			Msg( '{' )
+			if ( PrintTable( v, indent + 1, tDone ) > 0 ) then
+				Msg( '\n'..string.rep( '\t', indent ).."}" )
+			else
+				Msg( " }" )
+			end
 		else
-			MsgN( Format( "[%s]"..string.rep(' ', maxLength - #tostring( k )).." = %s", k, v ) )
+			if ( isstring( v ) ) then
+				Msg( '"'..tostring( v )..'"' )
+			else
+				Msg( tostring( v ) )
+			end
 		end
 	end
-
+	if ( indent > 0 ) then
+		return count
+	else
+		MsgN()
+	end
 end

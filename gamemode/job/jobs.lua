@@ -1,5 +1,3 @@
---- A generic job.
-
 --[[
 Job table structure:
 
@@ -21,15 +19,28 @@ Key: "access"
 Value: table of area access identifiers (e.g. "security", "science", "medical", "storage", etc.)
 --]]
 
--- Blank job
--- job.Register( "", {
--- 	name = "",
--- 	description = "",
--- 	faction = "",
--- 	department = "",
--- 	supervisor = "",
--- 	access = { }
--- } )
+-- Register a job.
+-- @param name Class name of job to create.
+-- @param mtable Table containing the job information.
+function job.Register( name, jobTable )
+	assert( istable( table ) )
+
+	if ( not job.Jobs[ name ] ) then
+		job.Jobs[ name ] = { }
+		job.Jobs[ name ].name = jobTable.name
+		job.Jobs[ name ].description = jobTable.description
+		job.Jobs[ name ].faction = jobTable.faction
+		job.Jobs[ name ].department = jobTable.department
+		job.Jobs[ name ].supervisor = jobTable.supervisor
+		job.Jobs[ name ].access = table.Copy( jobTable.access )
+	else
+		log.MsgN( Format( "Job \"%s\" already registered.", name ), 2 )
+	end
+end
+
+function job.GetJobsTable()
+	return table.Copy( job.Jobs )
+end
 
 -- COMMAND
 

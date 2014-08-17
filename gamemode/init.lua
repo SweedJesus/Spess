@@ -17,7 +17,7 @@ T.CVAR = {
 T.CVAR_ARGS = {
 	[T.CVAR.LOG_LEVEL] 				= {"2", nil, nil},
 	[T.CVAR.WAIT_MIN_PLAYERS] = {"1", nil, nil},
-	[T.CVAR.PRE_SECONDS] 			= {"10", nil, nil},
+	[T.CVAR.PRE_SECONDS] 			= {"60", nil, nil},
 	[T.CVAR.POST_SECONDS] 		= {"2", nil, nil}
 }
 
@@ -37,6 +37,7 @@ AddCSLuaFile( "log/log.lua" )
 
 AddCSLuaFile( "round/cl_round.lua" )
 
+AddCSLuaFile( "job/jobs.lua")
 AddCSLuaFile( "job/cl_job.lua")
 
 AddCSLuaFile( "derma/cl_derma.lua" )
@@ -64,7 +65,6 @@ end
 function GM:Initialize()
 	MsgN("Spess server initializing...")
 	MsgN(string.format("Version %s", GAMEMODE.VERSION))
-	math.randomseed(os.time())
 
 	round.StartWait()
 end
@@ -86,8 +86,4 @@ concommand.Add( "sps_round", function( ply, sCmd, args )
 	else
 		log.MsgN( Format( "Unknown round state \"%s\"", state ), 0 )
 	end
-end )
-
-concommand.Add( "sps_jobs", function()
-	PrintTable( job.GetJobsTable() )
 end )

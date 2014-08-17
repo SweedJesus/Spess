@@ -51,7 +51,7 @@ function round.StartPre()
 	timer.Create(T.TIMER.ROUND, preSeconds, 1, round.StartActive)
 	-- Send
 	round.SendRoundStateValues()
-	job.SendJobPreferenceRequest()
+	job.SendJobPrefRequest()
 end
 
 --- Set round state to active.

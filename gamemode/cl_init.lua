@@ -54,10 +54,9 @@ include( "round/cl_round.lua" )
 
 include( "job/cl_job.lua" )
 
--- include( "derma/cl_derma.lua" )
+include( "derma/cl_derma.lua" )
 
 -- include( "vgui/job_pref_menu_rad.lua" )
-include( "vgui/job_pref_menu.lua" )
 
 -- Create cvars
 for k, v in pairs( T.Cvar ) do
@@ -69,6 +68,12 @@ round.UpdateFromGlobals()
 
 -- Concommands
 concommand.Add( "sps_job_pref_menu", job.ToggleJobPrefMenu )
+concommand.Add( "sps_jobs", function()
+	PrintTable( job.GetJobsTable() )
+end )
+concommand.Add( "sps_job_prefs", function()
+	PrintTable( job.Preferences )
+end )
 
 --- Game load hook.
 function GM:Initialize()

@@ -7,7 +7,7 @@ SKIN = {}
 SKIN.PrintName 		= "Spess Derma Skin"
 SKIN.Author 		= ""
 SKIN.DermaVersion	= 1
-SKIN.GwenTexture	= Material( "SpessDerma.png" )
+SKIN.GwenTexture	= Material( "spessderma.png" )
 
 SKIN.bg_color 					= Color( 101, 100, 105, 255 )
 SKIN.bg_color_sleep 			= Color( 70, 70, 70, 255 )
