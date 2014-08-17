@@ -7,6 +7,11 @@ job.Preferences = {}
 
 function job.ShowJobPrefMenu()
 	log.MsgN( "Showing JobPrefMenu.", 2 )
+	for k, v in pairs( job.JobPrefMenu.ListView.Lines ) do
+		local pref = job.Preferences [ v.JobKey ]
+		v.Preference = pref
+		v.Combo:ChooseOptionID( pref )
+	end
 	job.JobPrefMenu:Center()
 	job.JobPrefMenu:SetVisible( true )
 end
@@ -24,20 +29,25 @@ function job.ToggleJobPrefMenu()
 	end
 end
 
-local function ReceiveJobPrefRequest()
-	log.MsgN( "Job preference request received.", 2 )
-	job.ShowJobPrefMenu()
-end
-net.Receive( T.NET.JOB_PREF, ReceiveJobPrefRequest )
-
-function job.SendJobPref()
+function job.SendJobPrefs()
 	log.MsgN( "Job preferences sent.", 2 )
 	net.Start( T.NET.JOB_PREF )
 	for k, v in pairs( job.Jobs ) do
-		net.WriteUInt( job.Preferences[ k ] or 1, 3 )
+		net.WriteUInt( job.Preferences[ k ], 3 )
 	end
 	net.SendToServer()
 end
 
+local function ReceiveJobPrefRequest()
+	log.MsgN( "Job preference request received.", 2 )
+	for k, v in pairs( job.Jobs ) do
+		job.Preferences[ k ] = net.ReadUInt( 3 )
+	end
+	job.ShowJobPrefMenu()
+end
+net.Receive( T.NET.JOB_PREF, ReceiveJobPrefRequest )
+
 include( "jobs.lua" )
-include( "../vgui/job_pref_menu.lua" )
+for k, v in pairs( job.Jobs ) do
+	job.Preferences[ k ] = 1
+end

@@ -34,11 +34,13 @@ local function AddJobLine( key, jobName, department )
 	line.Department = department
 	line.Preference = 1 -- Default NEVER
 
+	line.Combo = pref
+
+	local oldPaint = line.Paint
 	line.Paint = function( self, w, h )
+		oldPaint( self, w, h )
 		if ( departments[ line.Department ] ) then
 			draw.RoundedBox( 0, 0, 0, w, h, departments[ line.Department ][2] )
-		else
-			draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 255, 0 ) )
 		end
 	end
 
@@ -78,12 +80,12 @@ function PANEL:Init()
 	self.ListView.OnClickLine = function()end
 
 	self.ButtonOkay = vgui.Create( "DButton", self )
-	self.ButtonOkay:SetText( "Okay" )
+	self.ButtonOkay:SetText( "Send" )
 	self.ButtonOkay:SetSize( 80, 25 )
 	self.ButtonOkay:SetPos( wide-85, tall-30 )
 	self.ButtonOkay.DoClick = function()
-		job.SendJobPref()
-		self:Close()
+		job.SendJobPrefs()
+		-- self:Close()
 	end
 
 	self.Progress = vgui.Create( "DProgress", self )

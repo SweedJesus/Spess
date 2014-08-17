@@ -16,7 +16,7 @@ T.CVAR = {
 -- @table T.CVAR_ARGS
 T.CVAR_ARGS = {
 	[T.CVAR.LOG_LEVEL] 				= {"2", nil, nil},
-	[T.CVAR.WAIT_MIN_PLAYERS] = {"1", nil, nil},
+	[T.CVAR.WAIT_MIN_PLAYERS] = {"2", nil, nil},
 	[T.CVAR.PRE_SECONDS] 			= {"60", nil, nil},
 	[T.CVAR.POST_SECONDS] 		= {"2", nil, nil}
 }
@@ -67,6 +67,10 @@ function GM:Initialize()
 	MsgN(string.format("Version %s", GAMEMODE.VERSION))
 
 	round.StartWait()
+end
+
+function GM:NetworkIDValidated( name, steamID )
+	log.MsgN( "NETWORK ID VALIDATED", 2 )
 end
 
 --- Cvar replication.

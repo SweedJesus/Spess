@@ -56,6 +56,7 @@ include( "job/cl_job.lua" )
 
 include( "derma/cl_derma.lua" )
 
+include( "vgui/job_pref_menu.lua" )
 -- include( "vgui/job_pref_menu_rad.lua" )
 
 -- Create cvars
