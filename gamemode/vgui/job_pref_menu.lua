@@ -2,7 +2,7 @@ local wide, tall = 350, 400
 
 local departments = {
 	["Command"] 			= { 1, Color( 156, 195, 227, 100 ) },
-	["Security"] 			= { 2, Color( 231, 151, 151, 100 ) },
+	["Security"] 			= { 2, Color( 231, 0  , 0  , 100 ) },
 	["Engineering"] 	= { 3, Color( 237, 181, 146, 100 ) },
 	["Science"] 			= { 4, Color( 176, 152, 230, 100 ) },
 	["Medical"] 			= { 5, Color( 230, 152, 216, 100 ) },
@@ -14,27 +14,30 @@ local numDepartments = 8
 
 local PANEL = {}
 
-local function AddJobLine( key, jobName, department )
+local function AddJobLine( jobKey )
 	local line
+	local title = job.Jobs[ jobKey ].title
+	local department = job.Jobs[ jobKey ].department
+	MsgN( job.Jobs[ jobKey ].title )
 
-	local pref = vgui.Create( "DComboBox" )
-	pref:AddChoice( "NEVER" )
-	pref:AddChoice( "LOW" )
-	pref:AddChoice( "MEDIUM" )
-	pref:AddChoice( "HIGH" )
-	pref:ChooseOptionID( 1 )
-	pref.OnSelect = function( panel, index, value )
+	local prefVGUI = vgui.Create( "DComboBox" )
+	prefVGUI:AddChoice( "NEVER" )
+	prefVGUI:AddChoice( "LOW" )
+	prefVGUI:AddChoice( "MEDIUM" )
+	prefVGUI:AddChoice( "HIGH" )
+	prefVGUI:ChooseOptionID( 1 )
+	prefVGUI.OnSelect = function( panel, index, value )
 		line.Preference = index
 		job.Preferences[ line.JobKey ] = line.Preference
 	end
 
-	line = job.JobPrefMenu.ListView:AddLine( jobName, department, pref )
-	line.JobKey = key
-	line.JobName = jobName
+	line = job.JobPrefMenu.ListView:AddLine( title, department, prefVGUI )
+	line.JobKey = jobKey
+	line.JobTitle = title
 	line.Department = department
 	line.Preference = 1 -- Default NEVER
-
-	line.Combo = pref
+	line.Combo = prefVGUI
+	job.JobPrefMenu[ jobKey ] = line
 
 	local oldPaint = line.Paint
 	line.Paint = function( self, w, h )
@@ -47,14 +50,13 @@ local function AddJobLine( key, jobName, department )
 	line.GetColumnText = function( self, i )
 		if ( i == 1 ) then
 			-- Sort by job name
-			return self.Columns[ i ].Value
+			return self.JobTitle
 		elseif ( i == 2 ) then
 			-- Sort by department tier
-			local s = self.Columns[ i ]:GetText()
-			if ( departments[ s ] ) then
-				return departments[ s ][1]
+			if ( departments[ self.Department ] ) then
+				return ( departments[ self.Department ][ 1 ] * 10 ) + job.Jobs[ self.JobKey ].departmentTier
 			else
-			  return numDepartments + 1
+			  return ( numDepartments + 1 ) * 10
 			end
 		elseif ( i == 3 ) then
 			-- Sort by job preference
@@ -111,5 +113,5 @@ end
 vgui.Register( "JobPrefMenu", PANEL, "DFrame" )
 job.JobPrefMenu = vgui.Create( "JobPrefMenu" )
 for k, v in pairs( job.Jobs ) do
-	AddJobLine( k, v.name, v.department )
+	AddJobLine( k )
 end

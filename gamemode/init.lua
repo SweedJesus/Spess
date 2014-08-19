@@ -15,8 +15,8 @@ T.CVAR = {
 --- Server cvar arguments.
 -- @table T.CVAR_ARGS
 T.CVAR_ARGS = {
-	[T.CVAR.LOG_LEVEL] 				= {"2", nil, nil},
-	[T.CVAR.WAIT_MIN_PLAYERS] = {"2", nil, nil},
+	[T.CVAR.LOG_LEVEL] 				= {"1", nil, nil},
+	[T.CVAR.WAIT_MIN_PLAYERS] = {"1", nil, nil},
 	[T.CVAR.PRE_SECONDS] 			= {"60", nil, nil},
 	[T.CVAR.POST_SECONDS] 		= {"2", nil, nil}
 }
@@ -28,20 +28,15 @@ T.TIMER = {
 }
 
 -- Send include files to clients
-AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_util.lua" )
-
 AddCSLuaFile( "log/log.lua" )
-
 AddCSLuaFile( "round/cl_round.lua" )
-
 AddCSLuaFile( "job/jobs.lua")
 AddCSLuaFile( "job/cl_job.lua")
-
 AddCSLuaFile( "derma/cl_derma.lua" )
-
 AddCSLuaFile( "vgui/job_pref_menu.lua" )
 AddCSLuaFile( "vgui/job_pref_menu_rad.lua" )
 
@@ -50,6 +45,7 @@ include( "shared.lua" )
 include( "log/log.lua" )
 include( "job/job.lua")
 include( "round/round.lua" )
+include( "player.lua" )
 
 -- Add network strings
 for k, v in pairs(T.NET) do
@@ -69,10 +65,6 @@ function GM:Initialize()
 	round.StartWait()
 end
 
-function GM:NetworkIDValidated( name, steamID )
-	log.MsgN( "NETWORK ID VALIDATED", 2 )
-end
-
 --- Cvar replication.
 function T.SyncGlobals()
 end
@@ -90,4 +82,6 @@ concommand.Add( "sps_round", function( ply, sCmd, args )
 	else
 		log.MsgN( Format( "Unknown round state \"%s\"", state ), 0 )
 	end
-end )
+end, nil, nil, FCVAR_SERVER_CAN_EXECUTE  )
+
+concommand.Add( "sps_reload", function()  end )

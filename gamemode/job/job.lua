@@ -2,7 +2,6 @@
 -- @module job.lua
 
 job = {}
-job.Jobs = {}
 job.Preferences = {}
 
 local function SendJobPrefRequestHelper( ply )
